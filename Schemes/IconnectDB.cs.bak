@@ -1,0 +1,10 @@
+interface IconnectDB
+{
+    private string connectionString;
+    public void conectDatabase (string connectionString);
+    public bool isConnectedDatabase();
+    public bool closeConnectionDatabase();
+    public int existsUser (string username);
+    public int insertUser (User user);
+    public int loginUser (User user);
+}

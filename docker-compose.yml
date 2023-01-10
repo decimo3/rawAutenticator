@@ -1,0 +1,19 @@
+services:
+  #=================#
+  # MySQL container #
+  #=================#
+  sql:
+    image: "mysql:5.7"
+    container_name: mysql2
+    restart: always
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    environment:
+      MYSQL_DATABASE: "aplicacao"
+      MYSQL_USER: "${USERDB}"
+      MYSQL_PASSWORD: "${PASSDB}"
+      MYSQL_ROOT_PASSWORD: "${ROOTDB}"
+    volumes:
+      - ./App_Data/:/var/lib/mysql
