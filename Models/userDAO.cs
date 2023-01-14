@@ -1,20 +1,24 @@
 namespace userDAO;
-using MySql.Data.MySqlClient;
+using Npgsql;
 using User;
 
 public class userDAO
 {
-  private MySqlConnection connection;
-  // private MySqlDataAdapter cursor;
-  private string connectionString = "Persist Security Info=False;server=localhost;database=aplication;uid=usuario;pwd=123456789";
+  private NpgsqlConnection connection;
+  private string connectionString = "Host=localhost;Username=usuario;Password=123456789;Database=aplicacao";
   public void conectDatabase()
   {
-    connection = new MySqlConnection(connectionString);
+    connection = new NpgsqlConnection(connectionString);
     try
     {
       connection.Open();
     }
-    catch(System.Exception error)
+    catch(NpgsqlException error)
+    {
+      System.Console.WriteLine(error.Message);
+      System.Console.WriteLine(error.StackTrace);
+    }
+    catch (System.Exception error)
     {
       System.Console.WriteLine(error.Message);
       System.Console.WriteLine(error.StackTrace);

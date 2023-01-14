@@ -4,3 +4,8 @@ Aplicação para prática de aplicação com persistência de dados em banco de 
 * Caso o usuário não tenha logado anteriormente, ele deverá escolher entre login e cadastro;
   * Ao escolher cadastro, ele deverá escrever um nome de usuário válido e único e uma senha forte. Ao final de um cadastro bem sucedido, o usuário será direcionado para o login;
   * Caso o usuário escolha logar, ele deverá escrever um nome de usuário existente e a senha correta. Ao fazer um login com sucesso, será gerado um token que será gravado no arquivo ~/.config/rawAutenticator para usuários Linux ou _%USERPROFILE%/AppData/Local/rawAutenticator_ para usuários Windows;
+
+```sh
+dotnet publish -c Release
+docker-compose up --detach
+```

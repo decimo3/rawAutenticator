@@ -1,19 +1,21 @@
 services:
-  #=================#
-  # MySQL container #
-  #=================#
-  sql:
-    image: "mysql:5.7"
-    container_name: mysql2
+  db:
+    image: "postgres:latest"
+    container_name: "pgdb"
     restart: always
-    ports:
-      - "3306:3306"
-    expose:
-      - "3306"
     environment:
-      MYSQL_DATABASE: "aplicacao"
-      MYSQL_USER: "${USERDB}"
-      MYSQL_PASSWORD: "${PASSDB}"
-      MYSQL_ROOT_PASSWORD: "${ROOTDB}"
+      POSTGRES_USER: "usuario"
+      POSTGRES_PASSWORD: "123456789"
+      POSTGRES_DB: "aplicacao"
+    ports:
+      - "5432:5432"
+    expose:
+      - "5432"
     volumes:
-      - ./App_Data/:/var/lib/mysql
+      - ./App_Data/:/var/lib/postgresql/data/
+  C#:
+    image: mcr.microsoft.com/dotnet/runtime:7.0
+    container_name: dotnet
+    command: "dotnet /tmp/Program.dll"
+    volumes:
+        - ./bin/Release/net7.0/publish/:/tmp/
