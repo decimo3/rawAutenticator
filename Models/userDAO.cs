@@ -1,6 +1,5 @@
-namespace userDAO;
+namespace Account;
 using Npgsql;
-using User;
 
 public class userDAO
 {
