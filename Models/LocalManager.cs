@@ -8,20 +8,12 @@ public static class LocalManager
     if (System.OperatingSystem.IsWindows()) return (userfolder + "\\AppData\\Local\\rawAutenticator");
     throw new System.Exception("Sistema operacional não configurado!");
   }
-  public static void isLogin()
+  public static string isLogin()
   {
     if (System.IO.File.Exists(homepath()))
     {
       var token = System.IO.File.ReadAllText(homepath());
-      var json = TokenManager.untokerize(token);
-      try
-      {
-        
-      }
-      catch
-      {
-
-      }
+      return TokenManager.untokerize(token);
     }
     throw new System.Exception("Usuário não está logado localmente");
   }
