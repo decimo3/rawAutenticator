@@ -1,8 +1,17 @@
 namespace Account;
-public class accountManager
+public static class accountManager
 {
-  public accountManager ()
+  public static void init()
   {
-    System.Console.WriteLine("Hello from Account Manager!");
+    try
+    {
+      string token = Account.LocalManager.isLogin();
+      Account.UserJWT json = System.Text.Json.JsonSerializer.Deserialize<Account.UserJWT>(token);
+      Account.User user = Account.userDAO.returnUser(json.user);
+    }
+    catch (System.Exception)
+    {
+      Account.Wellcome.autentication();
+    }
   }
 }
