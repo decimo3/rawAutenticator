@@ -1,9 +1,9 @@
 namespace Account;
 public static class TokenManager
 {
+  private static string secret = System.Environment.GetEnvironmentVariable("SECRET");
   public static string intokerize (User user)
   {
-    string secret = System.Environment.GetEnvironmentVariable("SECRET");
     return new JWT.Builder.JwtBuilder()
       .WithAlgorithm(new JWT.Algorithms.HMACSHA256Algorithm())
       .WithSecret(System.Text.Encoding.UTF8.GetBytes(secret))
@@ -14,7 +14,6 @@ public static class TokenManager
   }
   public static string untokerize (string token)
   {
-    string secret = System.Environment.GetEnvironmentVariable("SECRET");
     return new JWT.Builder.JwtBuilder()
       .WithAlgorithm(new JWT.Algorithms.HMACSHA256Algorithm())
       .WithSecret(System.Text.Encoding.UTF8.GetBytes(secret))
