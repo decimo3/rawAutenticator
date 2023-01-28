@@ -8,7 +8,7 @@ public static class LocalManager
     if (System.OperatingSystem.IsWindows()) return (userfolder + "\\AppData\\Local\\rawAutenticator");
     throw new System.Exception("Sistema operacional não configurado!");
   }
-  public static string isLogin()
+  public static string recoverLocalToken()
   {
     if (System.IO.File.Exists(homepath()))
     {

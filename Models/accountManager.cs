@@ -5,7 +5,7 @@ public static class accountManager
   {
     try
     {
-      string token = Account.LocalManager.isLogin();
+      string token = Account.LocalManager.recoverLocalToken();
       Account.UserJWT json = System.Text.Json.JsonSerializer.Deserialize<Account.UserJWT>(token);
       Account.User user = Account.userDAO.returnUser(json.user);
     }
