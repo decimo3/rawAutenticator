@@ -3,7 +3,7 @@ Classe para configuração de dotenv obtida na página
 https://www.treinaweb.com.br/blog/utilizando-arquivos-dotenv-env-em-uma-aplicacao-asp-net-core
 */
 
-namespace DotNetLoadDotEnv;
+namespace Utility;
 
 public static class DotEnv
 {
