@@ -1,53 +1,72 @@
 namespace Account;
 public static class databaseAcess
 {
-  public static string connectionString()
+  private static string connectionString = "Host=localhost;Username=usuario;Password=123456789;Database=aplicacao";
+  public static bool insert(string table, string[] values)
   {
-    return "Host=localhost;Username=usuario;Password=123456789;Database=aplicacao";
+    using(var connection = new Npgsql.NpgsqlConnection())
+    {
+      connection.ConnectionString = connectionString;
+      connection.Open();
+      System.Console.WriteLine("Connection OK from 'insert'!");
+      using (var command = new Npgsql.NpgsqlCommand())
+      {
+        command.Connection = connection;
+        var sqlValues = new System.Text.StringBuilder();
+        foreach (string valor in values)
+        {
+          sqlValues.Append($", '{@valor}'");
+        }
+        command.CommandText = $"INSERT INTO \"{@table}\" VALUES (DEFAULT{@sqlValues})";
+        System.Console.WriteLine(command.CommandText);
+        command.ExecuteNonQuery();
+      }
+      if (connection.State == System.Data.ConnectionState.Open) connection.Close();
+      return true;
+    }
   }
-  public static int insert(string query)
+  public static bool exist(string table, string field, string word)
   {
     using(var connection = new Npgsql.NpgsqlConnection())
     {
       int result;
-      connection.ConnectionString = connectionString();
+      connection.ConnectionString = connectionString;
       connection.Open();
-      System.Console.WriteLine("Connection OK!");
+      System.Console.WriteLine("Connection OK from 'exist'!");
       using (var command = new Npgsql.NpgsqlCommand())
       {
         command.Connection = connection;
-        command.CommandText = @query;
+        command.CommandText = $"SELECT {@field} FROM \"{@table}\" WHERE {@field} = '{@word}'";
         result = command.ExecuteNonQuery();
       }
       if (connection.State == System.Data.ConnectionState.Open) connection.Close();
-      return result;
+      return (result > 0);
     }
   }
-  public static void search(string query)
+  public static System.Collections.Generic.Dictionary<string, object> recover(string table, string field, string word)
   {
-    using(var connection = new Npgsql.NpgsqlConnection(connectionString()))
+    var linha = new System.Collections.Generic.Dictionary<string, object>();
+    using(var connection = new Npgsql.NpgsqlConnection())
     {
-      try
+      Npgsql.NpgsqlDataReader result;
+      connection.ConnectionString = connectionString;
+      connection.Open();
+      System.Console.WriteLine("Connection OK from 'recover'!");
+      
+      using (var command = new Npgsql.NpgsqlCommand())
       {
-        connection.Open();
-        System.Console.WriteLine("Connection OK!");
+        command.Connection = connection;
+        command.CommandText = $"SELECT * FROM \"{@table}\" WHERE {@field} = '{@word}'";
+        result = command.ExecuteReader();
+        
+        for (int i = 0; i < result.FieldCount; i++)
+        {
+          linha.Add(result.GetName(i), result.GetValue(i));
+          System.Console.WriteLine(result.GetValue(i));
+        }
       }
-      catch(Npgsql.NpgsqlException error)
-      {
-        System.Console.WriteLine("Connection fail!");
-        System.Console.WriteLine(error.Message);
-        System.Console.WriteLine(error.StackTrace);
-      }
-      catch (System.Exception error)
-      {
-        System.Console.WriteLine("Connection fail!");
-        System.Console.WriteLine(error.Message);
-        System.Console.WriteLine(error.StackTrace);
-      }
-      finally
-      {
-        if (connection.State == System.Data.ConnectionState.Open) connection.Close();
-      }
+      if (connection.State == System.Data.ConnectionState.Open) connection.Close();
     }
+    return linha;
   }
 }
