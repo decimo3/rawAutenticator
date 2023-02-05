@@ -28,12 +28,14 @@ public static class formValidation
     var regex = new System.Text.RegularExpressions.Regex(patern);
     return regex.Match(password).Success;
   }
-  public static (bool, bool) validateAnswer(string answer)
+  public static bool isValidadAnswer(string answer)
   {
-    var regexValidate = new System.Text.RegularExpressions.Regex(@"^[yYnNSs]$");
-    var regexPositive = new System.Text.RegularExpressions.Regex(@"^[yYSs]$");
-    var isValidAnswer = regexValidate.Match(answer).Success == true;
-    var isPositiveAnswer = regexPositive.Match(answer).Success == true;
-    return (isValidAnswer, isPositiveAnswer);
+    var regexValidate = new System.Text.RegularExpressions.Regex("^[yYnNSs]$");
+    return regexValidate.Match(answer).Success;
+  }
+  public static bool isPositiveAnswer(string answer)
+  {
+    var regexPositive = new System.Text.RegularExpressions.Regex("^[yYSs]$");
+    return regexPositive.Match(answer).Success;
   }
 }
