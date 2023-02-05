@@ -14,22 +14,71 @@ public static class Wellcome
     System.Console.WriteLine();
     return (Utility.formValidation.isPositiveAnswer(readkey.Key.ToString())) ? newUser() : oldUser();
   }
-  public static Account.User newUser()
+  private static string newUser()
   {
-    try
+    string username, password = "";
+    System.Console.Write("Escolha um nome de usuário: ");
+    do
     {
-      Account.databaseAcess.insert("users", valores);
-    }
-    catch (Npgsql.PostgresException error)
+      username = System.Console.ReadLine();
+      if(Utility.formValidation.username(username))
+      {
+        if(Account.databaseAcess.exist("users", "username", username))
+        {
+          System.Console.Write("O nome de usuário escolhido já está sendo utilizado! Tente outro: ");
+        }
+        else break;
+      }
+      else System.Console.Write("O nome de usuário escolhido não é válido! Tente novamente: ");
+    } while(true);
+    do
     {
-      System.Console.WriteLine(error.Message);
-      System.Console.WriteLine(error.StackTrace);
-    }
-    catch (System.Exception error)
-    {
-      System.Console.WriteLine(error.Message);
-      System.Console.WriteLine(error.StackTrace);
-    }
+      System.Console.Write("digite uma senha para o seu usuário: ");
+      password = System.Console.ReadLine();
+      if(Utility.formValidation.password(password)) break;
+      else
+      {
+        System.Console.Write("O senha escolhida não é válida! Tente novamente: ");
+        password = System.Console.ReadLine();
+      }
+    } while(true);
+    return Account.TokenManager.intokerize(Account.userDAO.insertUser(new Account.User(username, password, User.Role.Operational)));
   }
-  public static Account.User oldUser() {}
+  private static string oldUser()
+  {
+    string username, password = "";
+    System.Console.Write("Usuário: ");
+    username = System.Console.ReadLine();
+    do
+    {
+      if(Utility.formValidation.username(username))
+      {
+        if(!Account.databaseAcess.exist("users", "username", username))
+        {
+          System.Console.Write("O usuário informado não existe! Verifique e tente novamente! ");
+          username = System.Console.ReadLine();
+        }
+        else break;
+      }
+      else
+      {
+        System.Console.Write("O nome de usuário digitado não é válido! Tente novamente: ");
+        username = System.Console.ReadLine();
+      } 
+    } while(true);
+    System.Console.Write("Senha: ");
+    password = System.Console.ReadLine();
+    do
+    {
+      if(Utility.formValidation.password(password))
+      {
+        return Account.TokenManager.intokerize(Account.userDAO.loginUser(username, password));
+      }
+      else
+      {
+        System.Console.Write("O senha digitada não é válida! Tente novamente: ");
+        password = System.Console.ReadLine();
+      }
+    } while(true);
+  }
 }
