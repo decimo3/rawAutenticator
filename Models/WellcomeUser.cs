@@ -1,19 +1,18 @@
 namespace Account;
 public static class Wellcome
 {
-  public static Account.User autentication()
+  public static string Authenticate()
   {
     System.Console.WriteLine("Seja bem vindo ao rawAutenticator!");
     System.Console.WriteLine("O senhor já possui cadastro? [Y/N]");
-    var regex = new System.Text.RegularExpressions.Regex("^[yYnNSs]$");
     var readkey = System.Console.ReadKey();
-    while (Utility.formValidation.validateAnswer(readkey.Key.ToString()).Item1 == false)
+    while (Utility.formValidation.isValidadAnswer(readkey.Key.ToString()))
     {
       System.Console.WriteLine("\nOpção inválida! Use 'Y' ou 'S' para iniciar um cadastro ou 'N' para logar! ");
       readkey = System.Console.ReadKey();
     }
-    if(Utility.formValidation.validateAnswer(readkey.Key.ToString()).Item2 == true) return newUser();
-    else return oldUser();
+    System.Console.WriteLine();
+    return (Utility.formValidation.isPositiveAnswer(readkey.Key.ToString())) ? newUser() : oldUser();
   }
   public static Account.User newUser()
   {
