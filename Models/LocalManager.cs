@@ -17,4 +17,8 @@ public static class LocalManager
     }
     throw new System.Exception("Usuário não está logado localmente");
   }
+  public static void saveLocalToken(string token)
+  {
+    System.IO.File.WriteAllText(homepath(), token);
+  }
 }
