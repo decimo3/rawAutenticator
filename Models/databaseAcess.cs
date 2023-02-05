@@ -27,9 +27,9 @@ public static class databaseAcess
   }
   public static bool exist(string table, string field, string word)
   {
+    Npgsql.NpgsqlDataReader results;
     using(var connection = new Npgsql.NpgsqlConnection())
     {
-      int result;
       connection.ConnectionString = connectionString;
       connection.Open();
       System.Console.WriteLine("Connection OK from 'exist'!");
@@ -37,10 +37,11 @@ public static class databaseAcess
       {
         command.Connection = connection;
         command.CommandText = $"SELECT {@field} FROM \"{@table}\" WHERE {@field} = '{@word}'";
-        result = command.ExecuteNonQuery();
+        using(var results = command.ExecuteReader(System.Data.CommandBehavior.Default))
+        {
+          return results.HasRows;
+        }
       }
-      if (connection.State == System.Data.ConnectionState.Open) connection.Close();
-      return (result > 0);
     }
   }
   public static System.Collections.Generic.Dictionary<string, object> recover(string table, string field, string word)
